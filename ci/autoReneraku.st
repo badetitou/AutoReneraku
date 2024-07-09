@@ -1,5 +1,10 @@
 | auto critics data prNumber |
 
+Smalltalk os environment keys do: [ :key |
+Stdio stdout << key.
+Stdio stdout << String crlf	
+	 ].
+
 auto := AutoReneraku new.
 auto token: (Smalltalk os environment at: 'secrets.TOKEN').
 
