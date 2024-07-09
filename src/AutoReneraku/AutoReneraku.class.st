@@ -109,5 +109,5 @@ AutoReneraku >> reviewForMethod: aMethodNode [
 { #category : 'accessing' }
 AutoReneraku >> token: aToken [
 
-	client headerAt: #Authorization add: 'token' , aToken
+	client headerAt: #Authorization add: 'token ' , aToken
 ]
