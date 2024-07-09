@@ -96,10 +96,7 @@ AutoReneraku >> methodConcernedBy: renerakuCritic [
 { #category : 'api' }
 AutoReneraku >> post: url contents: someData [
 
-	client
-		post:
-		'https://api.github.com/repos/badetitou/AutoReneraku/pulls/1/comments'
-		contents: someData
+	client post: url contents: someData
 ]
 
 { #category : 'api' }
