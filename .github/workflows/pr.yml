@@ -1,5 +1,8 @@
 name: test
 
+permissions: 
+   pull-requests: write 
+
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   PULL_REQUEST_NUMBER: ${{ github.event.number }}
