@@ -4,6 +4,7 @@ auto := AutoReneraku new.
 auto token: (Smalltalk os environment at: 'GITHUB_TOKEN').
 
 critics := auto reviewForMethod: ARSample >> #testOutside.
+Stdio stderr << (ARSample >> #testOutside) sourceCode printString.
 
 critics do: [ :critic | 
 	data := auto convertRenerakuCriticsToSuggestion: critics anyOne. 
