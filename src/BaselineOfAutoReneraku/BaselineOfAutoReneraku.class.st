@@ -1,6 +1,6 @@
 Class {
 	#name : 'BaselineOfAutoReneraku',
-	#superclass : 'Object',
+	#superclass : 'BaselineOf',
 	#category : 'BaselineOfAutoReneraku',
 	#package : 'BaselineOfAutoReneraku'
 }
