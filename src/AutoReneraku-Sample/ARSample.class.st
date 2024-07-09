@@ -10,6 +10,6 @@ ARSample >> testOutside [
 
 	| outside |
 	1 > 2
-		           ifTrue: [ outside := 3 ]
-		           ifFalse: [ outside := 4 ]
+		ifTrue: [ outside := 3 ]
+		ifFalse: [ outside := 4 ]
 ]
