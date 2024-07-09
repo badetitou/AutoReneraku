@@ -15,10 +15,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-      repository-projects: write
+    permissions: write-all
     env:
       PROJECT_NAME: ${{ matrix.smalltalk }}
     strategy:
