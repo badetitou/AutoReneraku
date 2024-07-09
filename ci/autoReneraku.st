@@ -7,7 +7,7 @@ critics := auto reviewForMethod: ARSample >> #testOutside.
 Stdio stderr << (ARSample >> #testOutside) sourceCode printString.
 
 critics do: [ :critic | 
-	data := auto convertRenerakuCriticsToSuggestion: critics anyOne. 
+	data := auto convertRenerakuCriticsToSuggestion: critic. 
 	data at: 'commit_id' put: (Smalltalk os environment at: 'GITHUB_SHA').
 
 	prNumber := (Smalltalk os environment at: 'PULL_REQUEST_NUMBER').
