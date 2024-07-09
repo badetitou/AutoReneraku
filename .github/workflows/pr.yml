@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PROJECT_NAME: ${{ matrix.smalltalk }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.PAT }}
       PULL_REQUEST_NUMBER: ${{ github.event.number }}
     strategy:
       matrix:
