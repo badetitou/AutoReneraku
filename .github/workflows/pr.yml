@@ -2,7 +2,7 @@ name: test
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  TOKEN: ${{ secrets.TOKEN }}
+  TOKEN: ${{ secrets.env.TOKEN }}
   PULL_REQUEST_NUMBER: ${{ github.event.number }}
 
 # Controls when the action will run. Triggers the workflow on push or pull request
