@@ -1,12 +1,7 @@
 | auto critics data prNumber |
 
-Smalltalk os environment keys do: [ :key |
-Stdio stdout << key.
-Stdio stdout << String crlf	
-	 ].
-
 auto := AutoReneraku new.
-auto token: (Smalltalk os environment at: 'secrets.TOKEN').
+auto token: (Smalltalk os environment at: 'GITHUB_TOKEN').
 
 critics := auto reviewForMethod: ARSample >> #testOutside.
 
@@ -14,6 +9,5 @@ data := auto convertRenerakuCriticsToSuggestion: critics anyOne.
 data at: 'commit_id' put: (Smalltalk os environment at: 'GITHUB_SHA').
 
 prNumber := (Smalltalk os environment at: 'PULL_REQUEST_NUMBER').
-
 
 auto post: ('https://api.github.com/repos/badetitou/AutoReneraku/pulls/', prNumber printString, '/comments') contents: data
