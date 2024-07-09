@@ -94,7 +94,7 @@ AutoReneraku >> methodConcernedBy: renerakuCritic [
 ]
 
 { #category : 'api' }
-AutoReneraku >> post: url data: someData [
+AutoReneraku >> post: url contents: someData [
 
 	client
 		post:
