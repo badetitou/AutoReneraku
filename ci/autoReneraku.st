@@ -12,4 +12,5 @@ critics do: [ :critic |
 
 	prNumber := (Smalltalk os environment at: 'PULL_REQUEST_NUMBER').
 
-	auto post: ('https://api.github.com/repos/badetitou/AutoReneraku/pulls/', prNumber printString, '/comments') contents: data ]
+	Stdio stderr <<
+		(auto post: ('https://api.github.com/repos/badetitou/AutoReneraku/pulls/', prNumber printString, '/comments') contents: data) printString ]
