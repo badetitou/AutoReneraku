@@ -1,8 +1,5 @@
 name: test
 
-permissions: 
-   pull-requests: write 
-
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   PULL_REQUEST_NUMBER: ${{ github.event.number }}
@@ -18,6 +15,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     env:
       PROJECT_NAME: ${{ matrix.smalltalk }}-FAST-Java
     strategy:
