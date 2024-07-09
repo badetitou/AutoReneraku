@@ -7,6 +7,9 @@ on:
     branches: 
       - v*
       - main
+  
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 permissions:
   contents: read
@@ -17,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PROJECT_NAME: ${{ matrix.smalltalk }}
-      GITHUB_TOKEN: ${{ secrets.PAT }}
+      PAT: ${{ secrets.PAT }}
       PULL_REQUEST_NUMBER: ${{ github.event.number }}
     strategy:
       matrix:
