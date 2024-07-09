@@ -6,6 +6,7 @@ Stdio stdout << String crlf
 	 ].
 
 auto := AutoReneraku new.
+
 auto token: (Smalltalk os environment at: 'GITHUB_TOKEN').
 
 critics := auto reviewForMethod: ARSample >> #testOutside.
