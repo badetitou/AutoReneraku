@@ -5,6 +5,8 @@ auto token: (Smalltalk os environment at: 'GITHUB_TOKEN').
 
 critics := auto reviewForMethod: ARSample >> #testOutside.
 
+Stdio stdout << (ARSample >> #testOutside) sourceCode printString.
+
 data := auto convertRenerakuCriticsToSuggestion: critics anyOne. 
 data at: 'commit_id' put: (Smalltalk os environment at: 'GITHUB_SHA').
 
