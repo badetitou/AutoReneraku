@@ -6,6 +6,7 @@ auto token: (Smalltalk os environment at: 'GITHUB_TOKEN').
 critics := auto reviewForMethod: ARSample >> #testOutside.
 Stdio stderr << '======'.
 Stdio stderr << (critics size printString). 
+Stdio stderr flush.
 
 critics do: [ :critic | 
 	data := auto convertRenerakuCriticsToSuggestion: critics anyOne. 
