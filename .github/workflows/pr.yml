@@ -7,11 +7,14 @@ on:
     branches: 
       - v*
       - main
-      
+
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions: write-all
     env:
       PROJECT_NAME: ${{ matrix.smalltalk }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
