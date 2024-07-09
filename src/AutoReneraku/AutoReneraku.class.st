@@ -94,6 +94,15 @@ AutoReneraku >> methodConcernedBy: renerakuCritic [
 ]
 
 { #category : 'api' }
+AutoReneraku >> post: url data: someData [
+
+	client
+		post:
+		'https://api.github.com/repos/badetitou/AutoReneraku/pulls/1/comments'
+		contents: someData
+]
+
+{ #category : 'api' }
 AutoReneraku >> reviewForMethod: aMethodNode [
 
 	^ (aMethodNode ast allChildren flatCollect: [ :node |
