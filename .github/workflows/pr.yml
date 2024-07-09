@@ -1,10 +1,5 @@
 name: test
 
-env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  TOKEN: ${{ secrets.env.TOKEN }}
-  PULL_REQUEST_NUMBER: ${{ github.event.number }}
-
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the development branch
 on:
@@ -19,6 +14,8 @@ jobs:
     permissions: write-all
     env:
       PROJECT_NAME: ${{ matrix.smalltalk }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      PULL_REQUEST_NUMBER: ${{ github.event.number }}
     strategy:
       matrix:
         smalltalk: [ Pharo64-12  ]
