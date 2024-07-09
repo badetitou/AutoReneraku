@@ -1,5 +1,5 @@
 auto := AutoReneraku new.
-auto token: (Smalltalk os environment at: 'secrets.GITHUB_TOKEN')
+auto token: (Smalltalk os environment at: 'secrets.GITHUB_TOKEN').
 
 critics := auto reviewForMethod: ARSample >> #testOutside.
 
