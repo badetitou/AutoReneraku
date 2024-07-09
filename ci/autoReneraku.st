@@ -1,7 +1,7 @@
 | auto critics data prNumber |
 
 auto := AutoReneraku new.
-auto token: (Smalltalk os environment at: 'secrets.GITHUB_TOKEN').
+auto token: (Smalltalk os environment at: 'secrets.TOKEN').
 
 critics := auto reviewForMethod: ARSample >> #testOutside.
 
