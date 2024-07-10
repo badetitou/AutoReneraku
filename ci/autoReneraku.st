@@ -21,3 +21,4 @@ critics do: [ :critic |
 	Stdio stderr << String crlf.
 
 	Stdio stderr << (auto post: url contents: data) printString ]
+
