@@ -8,9 +8,9 @@ Stdio stderr << (ARSample >> #testOutside) sourceCode printString.
 
 critics do: [ :critic | 
 	data := auto convertRenerakuCriticsToSuggestion: critic. 
-	data at: 'commit_id' put: (Smalltalk os environment at: 'GITHUB_SHA').
+	data at: 'commit_id' put: (Smalltalk os environment at: 'COMMIT_SHA').
 
-	Stdio stderr << (Smalltalk os environment at: 'GITHUB_SHA').
+	Stdio stderr << (Smalltalk os environment at: 'COMMIT_SHA').
 
 	prNumber := (Smalltalk os environment at: 'PULL_REQUEST_NUMBER').
 	
