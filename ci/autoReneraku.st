@@ -1,4 +1,4 @@
-| auto critics data prNumber |
+| auto critics data prNumber url |
 
 auto := AutoReneraku new.
 auto token: (Smalltalk os environment at: 'PAT').
@@ -13,8 +13,11 @@ critics do: [ :critic |
 	prNumber := (Smalltalk os environment at: 'PULL_REQUEST_NUMBER').
 	
 	Stdio stderr << String crlf.
-	Stdio stderr << ('https://api.github.com/repos/badetitou/AutoReneraku/pulls/', prNumber printString, '/comments').
+	
+	url := String streamContents: [ :str |  str << 'https://api.github.com/repos/badetitou/AutoReneraku/pulls/'.
+		str << 12 printString.
+		str <<  '/comments' ].
+	Stdio stderr << url.
 	Stdio stderr << String crlf.
 
-	Stdio stderr <<
-		(auto post: ('https://api.github.com/repos/badetitou/AutoReneraku/pulls/', prNumber printString, '/comments') contents: data) printString ]
+	Stdio stderr << (auto post: url contents: data) printString ]
