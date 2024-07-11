@@ -9,7 +9,7 @@ Class {
 ARSample >> testOutside [
 
 	| outside |
-	outside := 1 > 2
-		           ifTrue: [ 3 ]
-		           ifFalse: [ 4 ]
+outside := 1 > 2
+	           ifTrue: [ 3 ]
+	           ifFalse: [ 4 ]
 ]
