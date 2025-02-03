@@ -67,7 +67,7 @@ AutoReneraku >> buildStartLineOf: data basedOn: renerakuCritic [
 ]
 
 { #category : 'api' }
-AutoReneraku >> convertRenerakuCriticsToSuggestion: renerakuCritic [
+AutoReneraku >> convertRenerakuCriticToSuggestion: renerakuCritic [
 
 	| data |
 	data := Dictionary new.
@@ -77,6 +77,15 @@ AutoReneraku >> convertRenerakuCriticsToSuggestion: renerakuCritic [
 	self buildLineOf: data basedOn: renerakuCritic.
 
 	^ data
+]
+
+{ #category : 'api' }
+AutoReneraku >> convertRenerakuCriticsToSuggestion: aCollectionOfCritics [
+
+	^ aCollectionOfCritics
+		  select: [ :critic | critic providesChange ]
+		  thenCollect: [ :critic |
+		  self convertRenerakuCriticToSuggestion: critic ]
 ]
 
 { #category : 'initialization' }
@@ -102,8 +111,13 @@ AutoReneraku >> post: url contents: someData [
 { #category : 'api' }
 AutoReneraku >> reviewForMethod: aMethodNode [
 
-	^ (aMethodNode ast allChildren flatCollect: [ :node |
-		   ReAssignmentInIfTrueRule new check: node ])
+	| nodeBasedRules |
+	^ aMethodNode ast allChildren flatCollect: [ :node |
+		  nodeBasedRules := ReNodeBasedRule allSubclasses select: [ :class |
+			                    class enabled and: [
+				                    class isAbstract not ] ].
+		  nodeBasedRules flatCollect: [ :ruleClass |
+			  ruleClass new check: node ] ]
 ]
 
 { #category : 'accessing' }

@@ -19,20 +19,20 @@ AutoRenerakuTest >> setUp [
 ]
 
 { #category : 'tests' }
-AutoRenerakuTest >> testConvertRenerakuCriticsToSuggestion [
+AutoRenerakuTest >> testConvertRenerakuCriticToSuggestion [
 
 	| critics result |
 	critics := auto reviewForMethod: ARSample2 >> #testOutside.
-	result := auto convertRenerakuCriticsToSuggestion: critics anyOne.
+	result := auto convertRenerakuCriticToSuggestion: critics anyOne.
 	self assert: (result isKindOf: Dictionary)
 ]
 
 { #category : 'tests' }
-AutoRenerakuTest >> testConvertRenerakuCriticsToSuggestionCheckBody [
+AutoRenerakuTest >> testConvertRenerakuCriticToSuggestionCheckBody [
 
 	| critics result |
 	critics := auto reviewForMethod: ARSample2 >> #testOutside.
-	result := auto convertRenerakuCriticsToSuggestion: critics anyOne.
+	result := auto convertRenerakuCriticToSuggestion: critics anyOne.
 	self assert: (result at: #body) equals: '```suggestion
 outside := 1 > 2
 	           ifTrue: [ 3 ]
@@ -41,30 +41,38 @@ outside := 1 > 2
 ]
 
 { #category : 'tests' }
-AutoRenerakuTest >> testConvertRenerakuCriticsToSuggestionCheckPath [
+AutoRenerakuTest >> testConvertRenerakuCriticToSuggestionCheckPath [
 
 	| critics result |
 	critics := auto reviewForMethod: ARSample2 >> #testOutside.
-	result := auto convertRenerakuCriticsToSuggestion: critics anyOne.
+	result := auto convertRenerakuCriticToSuggestion: critics anyOne.
 	self
 		assert: (result at: #path)
 		equals: 'src/AutoReneraku-Tests/ARSample2.class.st'
 ]
 
 { #category : 'tests' }
-AutoRenerakuTest >> testConvertRenerakuCriticsToSuggestionLine [
+AutoRenerakuTest >> testConvertRenerakuCriticToSuggestionLine [
 
 	| critics result |
 	critics := auto reviewForMethod: ARSample2 >> #testOutside.
-	result := auto convertRenerakuCriticsToSuggestion: critics anyOne.
+	result := auto convertRenerakuCriticToSuggestion: critics anyOne.
 	self assert: (result at: #line) equals: 14
 ]
 
 { #category : 'tests' }
-AutoRenerakuTest >> testConvertRenerakuCriticsToSuggestionStartLine [
+AutoRenerakuTest >> testConvertRenerakuCriticToSuggestionStartLine [
 
 	| critics result |
 	critics := auto reviewForMethod: ARSample2 >> #testOutside.
-	result := auto convertRenerakuCriticsToSuggestion: critics anyOne.
+	result := auto convertRenerakuCriticToSuggestion: critics anyOne.
 	self assert: (result at: #start_line) equals: 12
+]
+
+{ #category : 'tests' }
+AutoRenerakuTest >> testEqualsTrue [
+
+	| critics result |
+	critics := auto reviewForMethod: ARSample1 >> #testEqualsTrue.
+	result := auto convertRenerakuCriticsToSuggestion: critics
 ]
