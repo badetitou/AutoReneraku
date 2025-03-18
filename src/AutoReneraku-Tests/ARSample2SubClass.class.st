@@ -6,6 +6,13 @@ Class {
 }
 
 { #category : 'another protocol' }
+ARSample2SubClass >> initialize [
+
+	super initialize.
+	1 + 1
+]
+
+{ #category : 'another protocol' }
 ARSample2SubClass >> testOutside [
 
 	

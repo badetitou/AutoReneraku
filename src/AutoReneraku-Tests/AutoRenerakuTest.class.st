@@ -70,10 +70,19 @@ AutoRenerakuTest >> testConvertRenerakuCriticsToSuggestionStartLine [
 ]
 
 { #category : 'tests' }
-AutoRenerakuTest >> testRenerakuOnProtol [
+AutoRenerakuTest >> testRenerakuOnProtocol [
 
 	| critics result |
 	critics := auto reviewForMethod: ARSample2SubClass >> #testOutside.
+	result := auto convertRenerakuCriticsToSuggestion: critics anyOne.
+	self assert: (result isKindOf: Dictionary)
+]
+
+{ #category : 'tests' }
+AutoRenerakuTest >> testRenerakuOnProtocolInitialize [
+
+	| critics result |
+	critics := auto reviewForMethod: ARSample2SubClass >> #initialize.
 	result := auto convertRenerakuCriticsToSuggestion: critics anyOne.
 	self assert: (result isKindOf: Dictionary)
 ]

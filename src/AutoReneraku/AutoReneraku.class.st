@@ -102,8 +102,16 @@ AutoReneraku >> post: url contents: someData [
 { #category : 'api' }
 AutoReneraku >> reviewForMethod: aMethodNode [
 
-	^ (aMethodNode ast allChildren flatCollect: [ :node |
-		   ReAssignmentInIfTrueRule new check: node ])
+	| critics |
+	critics := aMethodNode ast allChildren flatCollect: [ :node |
+		           ReAssignmentInIfTrueRule new check: node ].
+	critics addAll:
+		(ReInconsistentMethodClassificationRule new check: aMethodNode).
+	critics addAll:
+		((ReProperMethodProtocolRule allSubclasses reject: #isAbstract)
+			 flatCollect: [ :class | class new check: aMethodNode ]).
+
+	^ critics
 ]
 
 { #category : 'accessing' }
