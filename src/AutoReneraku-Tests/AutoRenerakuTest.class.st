@@ -11,7 +11,7 @@ Class {
 	#package : 'AutoReneraku-Tests'
 }
 
-{ #category : 'tests' }
+{ #category : 'running' }
 AutoRenerakuTest >> setUp [
 
 	super setUp.
@@ -67,4 +67,13 @@ AutoRenerakuTest >> testConvertRenerakuCriticsToSuggestionStartLine [
 	critics := auto reviewForMethod: ARSample2 >> #testOutside.
 	result := auto convertRenerakuCriticsToSuggestion: critics anyOne.
 	self assert: (result at: #start_line) equals: 12
+]
+
+{ #category : 'tests' }
+AutoRenerakuTest >> testRenerakuOnProtol [
+
+	| critics result |
+	critics := auto reviewForMethod: ARSample2SubClass >> #testOutside.
+	result := auto convertRenerakuCriticsToSuggestion: critics anyOne.
+	self assert: (result isKindOf: Dictionary)
 ]

@@ -31,6 +31,5 @@ BaselineOfAutoReneraku >> definePackages: spec [
 	spec
 		package: 'AutoReneraku';
 		package: 'AutoReneraku-Tests'
-		with: [ spec requires: #( 'AutoReneraku' ) ];
-		package: 'AutoReneraku-Sample'
+		with: [ spec requires: #( 'AutoReneraku' ) ]
 ]
