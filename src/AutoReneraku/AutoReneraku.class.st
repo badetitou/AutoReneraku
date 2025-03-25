@@ -32,14 +32,14 @@ AutoReneraku >> autoRenerakuMethod: aMethod [
 { #category : 'private' }
 AutoReneraku >> buildBodyOf: data basedOn: aMethod [
 
-	data at: #body put: (String streamContents: [ :str |
+	data at: #body put: ((String streamContents: [ :str |
 			 str << '```suggestion'.
 			 TonelWriter new
 				 writeMethodDefinition:
 				 aMethod asRingDefinition asMCMethodDefinition
 				 parent: aMethod methodClass asClassDefinition
 				 on: str.
-			 str << '```' ])
+			 str << '```' ]) copyReplaceAll: OSPlatform current lineEnding with: String cr)
 ]
 
 { #category : 'private' }
@@ -53,7 +53,7 @@ AutoReneraku >> buildLineOf: data basedOn: method [
 		at: #line
 		put:
 			((sc arToLineCharacter: startChar + method sourceCode size) at:
-				 #line) + 1 + 2 "+1 pharo + 2 keywords [] in tonel format"
+				 #line) + 2 "+ 2 keywords [] in tonel format"
 ]
 
 { #category : 'private' }
@@ -77,23 +77,10 @@ AutoReneraku >> buildStartLineOf: data basedOn: method [
 	startChar := self extractStartPosOf: method.
 	data
 		at: #start_line
-		put: ((sc arToLineCharacter: startChar) at: #line) + 1
+		put: ((sc arToLineCharacter: startChar) at: #line)
 ]
 
-{ #category : 'private' }
-AutoReneraku >> convertRenerakuCriticsToSuggestion: renerakuCritic [
-
-	| data |
-	data := Dictionary new.
-	self buildBodyOf: data basedon: renerakuCritic.
-	self buildPathOf: data basedOn: renerakuCritic.
-	self buildStartLineOf: data basedOn: renerakuCritic.
-	self buildLineOf: data basedOn: renerakuCritic.
-
-	^ data
-]
-
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 AutoReneraku >> extractStartPosOf: method [
 
 	| startChar sc firstLine aMethodDefinition aClassDefinition |
