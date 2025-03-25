@@ -28,8 +28,5 @@ BaselineOfAutoReneraku >> defineGroups: spec [
 { #category : 'baselines' }
 BaselineOfAutoReneraku >> definePackages: spec [
 
-	spec
-		package: 'AutoReneraku';
-		package: 'AutoReneraku-Tests'
-		with: [ spec requires: #( 'AutoReneraku' ) ]
+	spec package: 'AutoReneraku'
 ]

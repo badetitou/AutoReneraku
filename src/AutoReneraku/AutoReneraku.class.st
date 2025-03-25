@@ -2,71 +2,85 @@ Class {
 	#name : 'AutoReneraku',
 	#superclass : 'Object',
 	#instVars : [
-		'client'
+		'client',
+		'critiques'
 	],
 	#category : 'AutoReneraku',
 	#package : 'AutoReneraku'
 }
 
-{ #category : 'private' }
-AutoReneraku >> buildBodyOf: data basedon: renerakuCritic [
+{ #category : 'api' }
+AutoReneraku >> autoCorrectMethod: aMethod [
+	"I return true if I applied some modification"
 
-	data at: #body put: (String streamContents: [ :str |
-			 str << '```suggestion
-'.
-			 str << renerakuCritic newNode formattedCode.
-			 str << '
-```' ])
+	| toApplyCritique |
+	critiques := aMethod critiques.
+	toApplyCritique := critiques select: [ :critique |
+		                   critique providesChange ].
+	toApplyCritique do: [ :critique | critique execute ].
+	^ toApplyCritique isNotEmpty
 ]
 
 { #category : 'api' }
-AutoReneraku >> buildLineOf: data basedOn: renerakuCritic [
+AutoReneraku >> autoRenerakuMethod: aMethod [
+	"I return true if I applied some modification"
 
-	| startChar sc |
-	sc := TonelWriter sourceCodeOf:
-		      (self methodConcernedBy: renerakuCritic) methodClass.
-	startChar := sc findString: ((renerakuCritic entity source
-			               copyFrom: renerakuCritic entity sourceInterval first
-			               to: renerakuCritic entity sourceInterval last)
-			              copyReplaceAll: String cr
-			              with: OSPlatform current lineEnding).
-
-	data at: #line put: ((sc arToLineCharacter:
-			  startChar + renerakuCritic entity sourceInterval size) at: #line)
-		+ 1
+	(self autoCorrectMethod: aMethod) ifTrue: [
+		self suggestNewMethod: aMethod ]
 ]
 
 { #category : 'private' }
-AutoReneraku >> buildPathOf: data basedOn: renerakuCritic [
+AutoReneraku >> buildBodyOf: data basedOn: aMethod [
+
+	data at: #body put: (String streamContents: [ :str |
+			 str << '```suggestion'.
+			 TonelWriter new
+				 writeMethodDefinition:
+				 aMethod asRingDefinition asMCMethodDefinition
+				 parent: aMethod methodClass asClassDefinition
+				 on: str.
+			 str << '```' ])
+]
+
+{ #category : 'private' }
+AutoReneraku >> buildLineOf: data basedOn: method [
+
+	| startChar sc |
+	sc := TonelWriter sourceCodeOf: method methodClass.
+	startChar := self extractStartPosOf: method.
+
+	data
+		at: #line
+		put:
+			((sc arToLineCharacter: startChar + method sourceCode size) at:
+				 #line) + 1 + 2 "+1 pharo + 2 keywords [] in tonel format"
+]
+
+{ #category : 'private' }
+AutoReneraku >> buildPathOf: data basedOn: method [
 
 	data at: #path put: (String streamContents: [ :str |
 			 str << 'src/'.
 			 str
 			 <<
-			 (self methodConcernedBy: renerakuCritic) methodClass package name.
+			 method methodClass package name.
 			 str << '/'.
-			 str << (self methodConcernedBy: renerakuCritic) methodClass name.
+			 str << method methodClass name.
 			 str << '.class.st' ])
 ]
 
-{ #category : 'api' }
-AutoReneraku >> buildStartLineOf: data basedOn: renerakuCritic [
+{ #category : 'private' }
+AutoReneraku >> buildStartLineOf: data basedOn: method [
 
 	| startChar sc |
-	sc := TonelWriter sourceCodeOf:
-		      (self methodConcernedBy: renerakuCritic) methodClass.
-	startChar := sc findString: ((renerakuCritic entity source
-			               copyFrom: renerakuCritic entity sourceInterval first
-			               to: renerakuCritic entity sourceInterval last)
-			              copyReplaceAll: String cr
-			              with: OSPlatform current lineEnding).
-
+		sc := TonelWriter sourceCodeOf: method methodClass.
+	startChar := self extractStartPosOf: method.
 	data
 		at: #start_line
 		put: ((sc arToLineCharacter: startChar) at: #line) + 1
 ]
 
-{ #category : 'api' }
+{ #category : 'private' }
 AutoReneraku >> convertRenerakuCriticsToSuggestion: renerakuCritic [
 
 	| data |
@@ -75,6 +89,38 @@ AutoReneraku >> convertRenerakuCriticsToSuggestion: renerakuCritic [
 	self buildPathOf: data basedOn: renerakuCritic.
 	self buildStartLineOf: data basedOn: renerakuCritic.
 	self buildLineOf: data basedOn: renerakuCritic.
+
+	^ data
+]
+
+{ #category : 'as yet unclassified' }
+AutoReneraku >> extractStartPosOf: method [
+
+	| startChar sc firstLine aMethodDefinition aClassDefinition |
+	sc := TonelWriter sourceCodeOf: method methodClass.
+	aMethodDefinition := method asRingDefinition asMCMethodDefinition.
+	aClassDefinition := method methodClass asClassDefinition.
+	firstLine := String streamContents: [ :str |
+		             | fullClassName writer |
+		             writer := TonelWriter new.
+		             fullClassName := writer
+			                              classNameFor: aMethodDefinition
+			                              parent: aClassDefinition.
+		             TonelWriter new
+			             splitMethodSource:
+			             method asRingDefinition asMCMethodDefinition
+			             into: [ :methodDeclaration :methodBody |
+				             str << fullClassName << ' >> ' << methodDeclaration ] ].
+	^ startChar := sc findString: firstLine
+]
+
+{ #category : 'private' }
+AutoReneraku >> fillData: data withNewMethodData: aMethod [
+
+	self buildBodyOf: data basedOn: aMethod.
+	self buildPathOf: data basedOn: aMethod.
+	self buildStartLineOf: data basedOn: aMethod.
+	self buildLineOf: data basedOn: aMethod.
 
 	^ data
 ]
@@ -93,25 +139,27 @@ AutoReneraku >> methodConcernedBy: renerakuCritic [
 	^ renerakuCritic entity methodNode compiledMethod
 ]
 
-{ #category : 'api' }
+{ #category : 'private' }
 AutoReneraku >> post: url contents: someData [
 
 	^ client post: url contents: someData
 ]
 
 { #category : 'api' }
-AutoReneraku >> reviewForMethod: aMethodNode [
+AutoReneraku >> suggestNewMethod: aMethod [
 
-	| critics |
-	critics := aMethodNode ast allChildren flatCollect: [ :node |
-		           ReAssignmentInIfTrueRule new check: node ].
-	critics addAll:
-		(ReInconsistentMethodClassificationRule new check: aMethodNode).
-	critics addAll:
-		((ReProperMethodProtocolRule allSubclasses reject: #isAbstract)
-			 flatCollect: [ :class | class new check: aMethodNode ]).
-
-	^ critics
+	| data prNumber url |
+	data := Dictionary new.
+	data at: 'commit_id' put: (Smalltalk os environment at: 'COMMIT_SHA').
+	self fillData: data withNewMethodData: aMethod.
+	prNumber := Smalltalk os environment at: 'PULL_REQUEST_NUMBER'.
+	url := String streamContents: [ :str |
+		       str
+		       <<
+		       'https://api.github.com/repos/badetitou/AutoReneraku/pulls/'.
+		       str << prNumber.
+		       str << '/comments' ].
+	self post: url contents: data
 ]
 
 { #category : 'accessing' }
