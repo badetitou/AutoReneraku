@@ -23,9 +23,6 @@ runs:
         format: "space-delimited"
     - run: echo "changed_files=${{ steps.files.outputs.added_modified }}" >> "$GITHUB_ENV"
       shell: bash
-    - uses: hpi-swa/setup-smalltalkCI@v1
-      with:
-        smalltalk-image: ${{ inputs.smalltalk }}
     - run: smalltalkci -s ${{ inputs.smalltalk }} --image ${{ inputs.pharo-image }} .smalltalk-autoreneraku.ston
       shell: bash
       env:
