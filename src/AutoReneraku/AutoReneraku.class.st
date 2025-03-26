@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'client',
 		'critiques',
-		'projectName'
+		'projectName',
+		'methodsToConsider'
 	],
 	#category : 'AutoReneraku',
 	#package : 'AutoReneraku'
@@ -187,6 +188,33 @@ AutoReneraku >> post: url contents: someData [
 	^ client post: url contents: someData
 ]
 
+{ #category : 'api' }
+AutoReneraku >> prepareAutoReneraku [
+
+	| filesNames classesNames classes |
+	projectName := ((Smalltalk os environment at: 'GITHUB_REPOSITORY')
+		                splitOn: '/') last.
+
+	(IceRepositoryCreator new
+		 location: '.' asFileReference;
+		 subdirectory: 'src';
+		 createRepository)
+		name: projectName;
+		register.
+
+
+	filesNames := (Smalltalk os environment at: 'changed_files')
+		              splitOn: ' '.
+	classesNames := filesNames collect: [ :file |
+		                ((file splitOn: '/') last splitOn: '.') first ].
+	classes := classesNames collect: [ :className |
+		           Smalltalk classNamed: className ].
+	methodsToConsider := (classes reject: [ :clazz |
+		                      clazz isNil "in case class is not found" ])
+		                     flatCollect: [ :clazz | clazz methods ].
+	self token: (Smalltalk os environment at: 'PAT')
+]
+
 { #category : 'accessing' }
 AutoReneraku >> projectName [
 
@@ -197,6 +225,12 @@ AutoReneraku >> projectName [
 AutoReneraku >> projectName: anObject [
 
 	projectName := anObject
+]
+
+{ #category : 'api' }
+AutoReneraku >> run [
+
+	methodsToConsider do: [ :method | self autoRenerakuMethod: method ]
 ]
 
 { #category : 'api' }
