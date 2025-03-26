@@ -15,7 +15,7 @@ inputs:
     description: 'the smalltalk version'
     required: true
 runs:
-    using: 'composite'
+    using: composite
     steps:
       - id: files
         uses: masesgroup/retrieve-changed-files@v3
@@ -28,5 +28,3 @@ runs:
           smalltalk-image: ${{ smalltalk }}
       - run: smalltalkci -s ${{ smalltalk }} --image ${{ pharo-image }} .smalltalk-autoreneraku.ston
         shell: bash
-        env:
-          PAT: ${{ pat }}
