@@ -1,7 +1,7 @@
 | auto |
 
 Metacello new
-  githubUser: 'badetitou' project: 'AutoReneraku' commitish: 'main' path: 'src';
+  githubUser: 'badetitou' project: 'AutoReneraku' commitish: 'v1.0.5' path: 'src';
   baseline: 'AutoReneraku';
   onConflictUseIncoming;
   load.
