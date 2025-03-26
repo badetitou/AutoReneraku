@@ -209,12 +209,18 @@ AutoReneraku >> prepareAutoReneraku [
 	projectName := ((Smalltalk os environment at: 'GITHUB_REPOSITORY')
 		                splitOn: '/') last.
 
+	[
 	(IceRepositoryCreator new
 		 location: '.' asFileReference;
 		 subdirectory: 'src';
 		 createRepository)
 		name: projectName;
-		register.
+		register ]
+		on: IceDuplicatedRepository
+		do: [
+			Stdio stderr << 'Repository already installed in the image'.
+			Stdio stderr << IceRepository registry printString ].
+
 
 
 	filesNames := (Smalltalk os environment at: 'changed_files')
