@@ -18,7 +18,7 @@ AutoReneraku >> autoCorrectMethod: aMethod [
 	critiques := aMethod critiques.
 	toApplyCritique := critiques select: [ :critique |
 		                   critique providesChange ].
-	toApplyCritique do: [ :critique | critique execute ].
+	toApplyCritique do: [ :critique | critique change execute ].
 	^ toApplyCritique isNotEmpty
 ]
 
