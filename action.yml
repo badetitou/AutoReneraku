@@ -25,8 +25,8 @@ runs:
       shell: bash
     - uses: hpi-swa/setup-smalltalkCI@v1
       with:
-        smalltalk-image: ${{ smalltalk }}
-    - run: smalltalkci -s ${{ smalltalk }} --image ${{ pharo-image }} .smalltalk-autoreneraku.ston
+        smalltalk-image: ${{ inputs.smalltalk }}
+    - run: smalltalkci -s ${{ inputs.smalltalk }} --image ${{ inputs.pharo-image }} .smalltalk-autoreneraku.ston
       shell: bash
       env:
-        PAT: ${{ pat }}
+        PAT: ${{ inputs.pat }}
