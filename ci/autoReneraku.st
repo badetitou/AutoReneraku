@@ -6,7 +6,7 @@ Metacello new
   onConflictUseIncoming;
   load.
 
-auto := AutoReneraku new.
+auto := (Smalltalk classNamed: 'AutoReneraku') new.
 auto prepareAutoReneraku.
 auto run.
 
