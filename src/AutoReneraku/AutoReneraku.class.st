@@ -5,7 +5,9 @@ Class {
 		'client',
 		'critiques',
 		'projectName',
-		'methodsToConsider'
+		'methodsToConsider',
+		'url',
+		'commitSha'
 	],
 	#category : 'AutoReneraku',
 	#package : 'AutoReneraku'
@@ -90,6 +92,18 @@ AutoReneraku >> buildStartLineOf: data basedOn: method [
 	data
 		at: #start_line
 		put: ((sc arToLineCharacter: startChar) at: #line) + (self computeDiffStartOffsetFor: method) - 1 "-1 diff pharo"
+]
+
+{ #category : 'accessing' }
+AutoReneraku >> commitSha [
+
+	^ commitSha
+]
+
+{ #category : 'accessing' }
+AutoReneraku >> commitSha: anObject [
+
+	commitSha := anObject
 ]
 
 { #category : 'accessing' }
@@ -191,7 +205,7 @@ AutoReneraku >> post: url contents: someData [
 { #category : 'api' }
 AutoReneraku >> prepareAutoReneraku [
 
-	| filesNames classesNames classes |
+	| filesNames classesNames classes prNumber |
 	projectName := ((Smalltalk os environment at: 'GITHUB_REPOSITORY')
 		                splitOn: '/') last.
 
@@ -212,7 +226,12 @@ AutoReneraku >> prepareAutoReneraku [
 	methodsToConsider := (classes reject: [ :clazz |
 		                      clazz isNil "in case class is not found" ])
 		                     flatCollect: [ :clazz | clazz methods ].
-	self token: (Smalltalk os environment at: 'PAT')
+	self token: (Smalltalk os environment at: 'PAT').
+	prNumber := Smalltalk os environment at: 'PULL_REQUEST_NUMBER'.
+	url := 'https://api.github.com/repos/'
+	       , (Smalltalk os environment at: 'GITHUB_REPOSITORY')
+	       , '/pulls/' , prNumber , '/comments'.
+	commitSha := Smalltalk os environment at: 'COMMIT_SHA'
 ]
 
 { #category : 'accessing' }
@@ -236,12 +255,10 @@ AutoReneraku >> run [
 { #category : 'api' }
 AutoReneraku >> suggestNewMethod: aMethod [
 
-	| data prNumber url |
+	| data |
 	data := Dictionary new.
-	data at: 'commit_id' put: (Smalltalk os environment at: 'COMMIT_SHA').
+	data at: 'commit_id' put: commitSha.
 	self fillData: data withNewMethodData: aMethod.
-	prNumber := Smalltalk os environment at: 'PULL_REQUEST_NUMBER'.
-	url := 'https://api.github.com/repos/', (Smalltalk os environment at: 'GITHUB_REPOSITORY'), '/pulls/', prNumber, '/comments'.
 	self post: url contents: data
 ]
 
@@ -249,4 +266,16 @@ AutoReneraku >> suggestNewMethod: aMethod [
 AutoReneraku >> token: aToken [
 
 	client headerAt: #Authorization add: 'token ' , aToken
+]
+
+{ #category : 'accessing' }
+AutoReneraku >> url [
+
+	^ url
+]
+
+{ #category : 'accessing' }
+AutoReneraku >> url: anObject [
+
+	url := anObject
 ]
