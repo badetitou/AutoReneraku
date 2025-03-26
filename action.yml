@@ -13,7 +13,7 @@ runs:
         format: "space-delimited"
     - run: echo "changed_files=${{ steps.files.outputs.added_modified }}" >> "$GITHUB_ENV"
       shell: bash
-    - run: $SMALLTALK_CI_VM $SMALLTALK_CI_IMAGE st ${{ GITHUB_ACTION_PATH }}/ci/autoReneraku.st
+    - run: $SMALLTALK_CI_VM $SMALLTALK_CI_IMAGE st ${{ github.action_path }}/ci/autoReneraku.st
       shell: bash
       env:
         PAT: ${{ inputs.pat }}
