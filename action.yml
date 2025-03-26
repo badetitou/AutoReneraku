@@ -4,16 +4,6 @@ author: badetitou
 branding:
   color: orange
   icon: check-circle
-inputs:
-  pat:
-    description: "Personnal Access Token with repo right"
-    required: true
-  pharo-image:
-    description: "Path to Pharo image to test"
-    required: true
-  smalltalk:
-    description: "the smalltalk version"
-    required: true
 runs:
   using: composite
   steps:
@@ -23,7 +13,7 @@ runs:
         format: "space-delimited"
     - run: echo "changed_files=${{ steps.files.outputs.added_modified }}" >> "$GITHUB_ENV"
       shell: bash
-    - run: smalltalkci -s ${{ inputs.smalltalk }} --image ${{ inputs.pharo-image }} .smalltalk-autoreneraku.ston
+    - run: $SMALLTALK_CI_VM $SMALLTALK_CI_IMAGE st ci/autoReneraku.st
       shell: bash
       env:
         PAT: ${{ inputs.pat }}
