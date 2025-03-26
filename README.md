@@ -7,11 +7,14 @@ So one need first to setup smalltalk-ci to test its project.
 
 ### Create a PAT token
 
-We cannot use the generic GitHub token when using autoreneraku, so we will define a Personnal token.
+We cannot use the generic GitHub token when using autoreneraku, so we will define a fine-grained personnal access token.
 
-1. in https://github.com/settings/tokens/new
-2. Select: `pullReques`
-3. Set the variable in your repo `settings/secrets/actions` as PAT
+> This token can also be created as part of organization for better usability
+
+1. in https://github.com/settings/personal-access-tokens/new
+2. Select the repositories for this token (one, or all the repository you wanna use AutoReneraku)
+3. Select: `Pull Requests` with Read and Write access
+4. Set the variable in your repo `settings/secrets/actions` as PAT
 
 ### Update your ci configuration
 
