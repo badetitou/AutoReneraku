@@ -17,3 +17,5 @@ runs:
       shell: bash
       env:
         PAT: ${{ inputs.pat }}
+        PULL_REQUEST_NUMBER: ${{ github.event.number }}
+        COMMIT_SHA: ${{ github.event.pull_request.head.sha }}

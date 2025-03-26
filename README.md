@@ -47,10 +47,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      PROJECT_NAME: ${{ matrix.smalltalk }}
-      PULL_REQUEST_NUMBER: ${{ github.event.number }}
-      COMMIT_SHA: ${{ github.event.pull_request.head.sha }}
     strategy:
       matrix:
         smalltalk: [ Pharo64-12  ]
