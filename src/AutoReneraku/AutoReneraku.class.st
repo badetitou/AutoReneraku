@@ -101,7 +101,7 @@ AutoReneraku >> computeDiffStartOffsetFor: method [
 		           sourceVersion: registry headCommit;
 		           targetVersion: registry workingCopy;
 		           buildForPackages:
-			           { (registry packageNamed: ARSample package name) }.
+			           { (registry packageNamed: method methodClass package name) }.
 
 	diffChild := (iceDiff tree allChildren select: [ :child |
 		              child key = method selector ]) anyOne.
@@ -122,7 +122,7 @@ AutoReneraku >> computeDiffStopOffsetFor: method [
 		           sourceVersion: registry headCommit;
 		           targetVersion: registry workingCopy;
 		           buildForPackages:
-			           { (registry packageNamed: ARSample package name) }.
+			           { (registry packageNamed: method methodClass package name) }.
 
 	diffChild := (iceDiff tree allChildren select: [ :child |
 		              child key = method selector ]) anyOne.
