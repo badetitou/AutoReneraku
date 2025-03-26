@@ -1,6 +1,9 @@
 name: 'AutoReneraku'
 description: 'Automatic code review of Pharo Code using Reneraku Critiques'  
 author: badetitou
+branding:
+  color: orange
+  icon: check-circle
 inputs:
   pat:
     description: 'Personnal Access Token with repo right'
