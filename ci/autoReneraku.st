@@ -8,4 +8,6 @@ Metacello new
 
 auto := AutoReneraku new.
 auto prepareAutoReneraku.
-auto run
+auto run.
+
+Smalltalk snapshot: false andQuit: true
