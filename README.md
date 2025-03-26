@@ -21,17 +21,18 @@ We cannot use the generic GitHub token when using autoreneraku, so we will defin
 You need to add
 
 1. Checkout your all project
-   ```yml
+    ```yml
     - uses: actions/checkout@v2
       with:
         fetch-depth: '0'
-   ```
+    ```
 2. Add the AutoReneraku step
     ```yml
     - name: AutoReneraku
       uses: badetitou/AutoReneraku@main
       with:
         pat: ${{ secrets.PAT }}
+      if: github.event_name == 'pull_request'
     ```
 
 Full example:
@@ -69,6 +70,7 @@ jobs:
         uses: badetitou/AutoReneraku@main
         with:
           pat: ${{ secrets.PAT }}
+        if: github.event_name == 'pull_request'
 ```
 
 ## Developer
