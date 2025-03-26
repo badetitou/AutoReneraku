@@ -10,7 +10,7 @@ So one need first to setup smalltalk-ci to test its project.
 We cannot use the generic GitHub token when using autoreneraku, so we will define a Personnal token.
 
 1. in https://github.com/settings/tokens/new
-2. Select: `repo`
+2. Select: `pullReques`
 3. Set the variable in your repo `settings/secrets/actions` as PAT
 
 ### Update your ci configuration
@@ -66,4 +66,19 @@ jobs:
         uses: badetitou/AutoReneraku@main
         with:
           pat: ${{ secrets.PAT }}
+```
+
+## Developer
+
+It is possible to debug locally with a script like this one:
+
+```st
+auto := AutoReneraku new.
+auto projectName: 'AutoReneraku-Sample'.
+auto token: '<token>'.
+auto url: 'https://api.github.com/repos/badetitou/AutoReneraku-Sample/pulls/3/comments'.
+auto commitSha: '5f2c0995a5c9d19b679f77fd5d3f496d4c668d72'.
+class := ARSample.
+methods := class methods.
+methods do: [ :method | auto autoRenerakuMethod: method ]
 ```
