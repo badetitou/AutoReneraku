@@ -3,7 +3,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'client',
-		'critiques'
+		'critiques',
+		'projectName'
 	],
 	#category : 'AutoReneraku',
 	#package : 'AutoReneraku'
@@ -32,14 +33,26 @@ AutoReneraku >> autoRenerakuMethod: aMethod [
 { #category : 'private' }
 AutoReneraku >> buildBodyOf: data basedOn: aMethod [
 
+	| startChange stopChange |
 	data at: #body put: ((String streamContents: [ :str |
-			 str << '```suggestion'.
-			 TonelWriter new
-				 writeMethodDefinition:
-				 aMethod asRingDefinition asMCMethodDefinition
-				 parent: aMethod methodClass asClassDefinition
-				 on: str.
-			 str << '```' ]) copyReplaceAll: OSPlatform current lineEnding with: String cr)
+			  | changeBody |
+			  str << '```suggestion
+'.
+
+			  changeBody := String streamContents: [ :ch |
+				                TonelWriter new
+					                writeMethodDefinition:
+					                aMethod asRingDefinition asMCMethodDefinition
+					                parent: aMethod methodClass asClassDefinition
+					                on: ch ].
+				startChange := self computeDiffStartOffsetFor: aMethod.
+				stopChange := self computeDiffStopOffsetFor: aMethod.
+				str << (changeBody lines allButFirst copyFrom: startChange to: stopChange).
+
+			  str << '
+```' ])
+			 copyReplaceAll: OSPlatform current lineEnding
+			 with: String crlf)
 ]
 
 { #category : 'private' }
@@ -49,11 +62,8 @@ AutoReneraku >> buildLineOf: data basedOn: method [
 	sc := TonelWriter sourceCodeOf: method methodClass.
 	startChar := self extractStartPosOf: method.
 
-	data
-		at: #line
-		put:
-			((sc arToLineCharacter: startChar + method sourceCode size) at:
-				 #line) + 1 + 2 "+1 pharo + 2 keywords [] in tonel format"
+	data at: #line put: ((sc arToLineCharacter: startChar) at: #line)
+		+ (self computeDiffStopOffsetFor: method) "+1 pharo + 2 keywords [] in tonel format"
 ]
 
 { #category : 'private' }
@@ -73,17 +83,59 @@ AutoReneraku >> buildPathOf: data basedOn: method [
 AutoReneraku >> buildStartLineOf: data basedOn: method [
 
 	| startChar sc |
-		sc := TonelWriter sourceCodeOf: method methodClass.
+	sc := TonelWriter sourceCodeOf: method methodClass.
 	startChar := self extractStartPosOf: method.
 	data
 		at: #start_line
-		put: ((sc arToLineCharacter: startChar) at: #line)
+		put: ((sc arToLineCharacter: startChar) at: #line) + (self computeDiffStartOffsetFor: method)
+]
+
+{ #category : 'accessing' }
+AutoReneraku >> computeDiffStartOffsetFor: method [
+
+	| registry iceDiff diffChild realModification differences |
+	registry := IceRepository registry detect: [ :r |
+		            r name = self projectName ].
+	iceDiff := IceDiff new
+		           sourceVersion: registry headCommit;
+		           targetVersion: registry workingCopy;
+		           buildForPackages:
+			           { (registry packageNamed: ARSample package name) }.
+
+	diffChild := (iceDiff tree allChildren select: [ :child |
+		              child key = method selector ]) anyOne.
+	realModification := diffChild value.
+	differences := (DiffMorph
+		                from: realModification leftContents
+		                to: realModification rightContents) difference.
+	^ differences findFirst: [ :diff | diff key ~= 'match' ]
+]
+
+{ #category : 'accessing' }
+AutoReneraku >> computeDiffStopOffsetFor: method [
+
+	| registry iceDiff diffChild realModification differences |
+	registry := IceRepository registry detect: [ :r |
+		            r name = self projectName ].
+	iceDiff := IceDiff new
+		           sourceVersion: registry headCommit;
+		           targetVersion: registry workingCopy;
+		           buildForPackages:
+			           { (registry packageNamed: ARSample package name) }.
+
+	diffChild := (iceDiff tree allChildren select: [ :child |
+		              child key = method selector ]) anyOne.
+	realModification := diffChild value.
+	differences := (DiffMorph
+		                from: realModification leftContents
+		                to: realModification rightContents) difference.
+	^ (differences findLast: [ :diff | diff key ~= 'match' ]) - 3 "-3 to remove the [] and {} of tonel format"
 ]
 
 { #category : 'accessing' }
 AutoReneraku >> extractStartPosOf: method [
 
-	| startChar sc firstLine aMethodDefinition aClassDefinition |
+	| startChar startLine sc firstLine aMethodDefinition aClassDefinition |
 	sc := TonelWriter sourceCodeOf: method methodClass.
 	aMethodDefinition := method asRingDefinition asMCMethodDefinition.
 	aClassDefinition := method methodClass asClassDefinition.
@@ -98,7 +150,9 @@ AutoReneraku >> extractStartPosOf: method [
 			             method asRingDefinition asMCMethodDefinition
 			             into: [ :methodDeclaration :methodBody |
 				             str << fullClassName << ' >> ' << methodDeclaration ] ].
-	^ startChar := sc findString: firstLine
+	startChar := sc findString: firstLine.
+	startLine := startChar.
+	^ startLine
 ]
 
 { #category : 'private' }
@@ -130,6 +184,18 @@ AutoReneraku >> methodConcernedBy: renerakuCritic [
 AutoReneraku >> post: url contents: someData [
 
 	^ client post: url contents: someData
+]
+
+{ #category : 'accessing' }
+AutoReneraku >> projectName [
+
+	^ projectName
+]
+
+{ #category : 'accessing' }
+AutoReneraku >> projectName: anObject [
+
+	projectName := anObject
 ]
 
 { #category : 'api' }
