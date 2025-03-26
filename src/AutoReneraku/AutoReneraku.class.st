@@ -207,12 +207,7 @@ AutoReneraku >> suggestNewMethod: aMethod [
 	data at: 'commit_id' put: (Smalltalk os environment at: 'COMMIT_SHA').
 	self fillData: data withNewMethodData: aMethod.
 	prNumber := Smalltalk os environment at: 'PULL_REQUEST_NUMBER'.
-	url := String streamContents: [ :str |
-		       str
-		       <<
-		       'https://api.github.com/repos/badetitou/AutoReneraku/pulls/'.
-		       str << prNumber.
-		       str << '/comments' ].
+	url := 'https://api.github.com/repos/', (Smalltalk os environment at: 'GITHUB_REPOSITORY'), '/pulls/', prNumber, '/comments'.
 	self post: url contents: data
 ]
 
