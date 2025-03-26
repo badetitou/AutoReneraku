@@ -53,7 +53,7 @@ AutoReneraku >> buildLineOf: data basedOn: method [
 		at: #line
 		put:
 			((sc arToLineCharacter: startChar + method sourceCode size) at:
-				 #line) + 2 "+ 2 keywords [] in tonel format"
+				 #line) + 1 + 2 "+1 pharo + 2 keywords [] in tonel format"
 ]
 
 { #category : 'private' }
