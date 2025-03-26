@@ -1,0 +1,29 @@
+name: 'AutoReneraku'
+description: 'Automatic code review of Pharo Code using Reneraku Critiques'  
+author: badetitou
+inputs:
+  pat:
+    description: 'Personnal Access Token with repo right'
+    required: true
+  pharo-image:
+    description: 'Path to Pharo image to test'
+    required: true
+  smalltalk:
+    description: 'the smalltalk version'
+    required: true
+runs:
+    using: 'composite'
+    steps:
+      - id: files
+        uses: masesgroup/retrieve-changed-files@v3
+        with:
+          format: 'space-delimited'
+      - run: echo "changed_files=${{ steps.files.outputs.added_modified }}" >> "$GITHUB_ENV"
+        shell: bash
+      - uses: hpi-swa/setup-smalltalkCI@v1
+        with:
+          smalltalk-image: ${{ smalltalk }}
+      - run: smalltalkci -s ${{ smalltalk }} --image ${{ pharo-image }} .smalltalk-autoreneraku.ston
+        shell: bash
+        env:
+          PAT: ${{ pat }}

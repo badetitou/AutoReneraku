@@ -1,0 +1,18 @@
+SmalltalkCISpec {
+  #postLoading : [
+    'ci/autoReneraku.st'
+  ],
+  #loading : [
+    SCIMetacelloLoadSpec {
+      #baseline : 'AutoReneraku',
+      #repository : 'github://badetitou/AutoReneraku:main',
+      #directory : 'src',
+      #ignoreImage : true,
+      #onConflict : #useIncoming,
+      #onUpgrade : #useIncoming
+    }
+  ],
+  #testing : {
+    #failOnZeroTests : false
+  }
+}
