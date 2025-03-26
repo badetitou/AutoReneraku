@@ -5,9 +5,6 @@ branding:
   color: orange
   icon: check-circle
 inputs:
-  pat:
-    description: 'Personnal Access Token with repo right'
-    required: true
   pharo-image:
     description: 'Path to Pharo image to test'
     required: true
