@@ -45,14 +45,15 @@ AutoReneraku >> buildBodyOf: data basedOn: aMethod [
 					                aMethod asRingDefinition asMCMethodDefinition
 					                parent: aMethod methodClass asClassDefinition
 					                on: ch ].
-				startChange := self computeDiffStartOffsetFor: aMethod.
-				stopChange := self computeDiffStopOffsetFor: aMethod.
-				str << (changeBody lines allButFirst copyFrom: startChange to: stopChange).
+			  startChange := self computeDiffStartOffsetFor: aMethod.
+			  stopChange := self computeDiffStopOffsetFor: aMethod.
+			  str << (String cr join:
+				   (changeBody lines allButFirst
+					    copyFrom: startChange
+					    to: stopChange)).
 
 			  str << '
-```' ])
-			 copyReplaceAll: OSPlatform current lineEnding
-			 with: String crlf)
+```' ]) copyReplaceAll: OSPlatform current lineEnding with: String cr)
 ]
 
 { #category : 'private' }
@@ -63,7 +64,7 @@ AutoReneraku >> buildLineOf: data basedOn: method [
 	startChar := self extractStartPosOf: method.
 
 	data at: #line put: ((sc arToLineCharacter: startChar) at: #line)
-		+ (self computeDiffStopOffsetFor: method) "+1 pharo + 2 keywords [] in tonel format"
+		+ (self computeDiffStopOffsetFor: method) - 1 "-1 pharo"
 ]
 
 { #category : 'private' }
@@ -87,7 +88,7 @@ AutoReneraku >> buildStartLineOf: data basedOn: method [
 	startChar := self extractStartPosOf: method.
 	data
 		at: #start_line
-		put: ((sc arToLineCharacter: startChar) at: #line) + (self computeDiffStartOffsetFor: method)
+		put: ((sc arToLineCharacter: startChar) at: #line) + (self computeDiffStartOffsetFor: method) - 1 "-1 diff pharo"
 ]
 
 { #category : 'accessing' }
