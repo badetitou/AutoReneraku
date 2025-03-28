@@ -4,6 +4,11 @@ author: badetitou
 branding:
   color: orange
   icon: check-circle
+inputs:
+  pat:
+    description: 'The Personal Access Token, or GitHub app token, to be used for publishing the comments'
+    required: true
+    type: string
 runs:
   using: composite
   steps:
