@@ -50,10 +50,9 @@ AutoReneraku >> buildBodyOf: data basedOn: aMethod [
 					                on: ch ].
 			  startChange := self computeDiffStartOffsetFor: aMethod.
 			  stopChange := self computeDiffStopOffsetFor: aMethod.
-			  str << (String cr join:
-				   (changeBody lines allButFirst
+			  str << (String cr join: (changeBody lines allButFirst
 					    copyFrom: startChange
-					    to: stopChange)).
+					    to: startChange + stopChange - 1)).
 
 			  str << '
 ```' ]) copyReplaceAll: OSPlatform current lineEnding with: String cr)
@@ -130,7 +129,7 @@ AutoReneraku >> computeDiffStartOffsetFor: method [
 { #category : 'accessing' }
 AutoReneraku >> computeDiffStopOffsetFor: method [
 
-	| registry iceDiff diffChild realModification differences |
+	| registry iceDiff diffChild realModification differences insert remove |
 	registry := IceRepository registry detect: [ :r |
 		            r name = self projectName ].
 	iceDiff := IceDiff new
@@ -146,7 +145,9 @@ AutoReneraku >> computeDiffStopOffsetFor: method [
 	differences := (DiffMorph
 		                from: realModification leftContents
 		                to: realModification rightContents) difference.
-	^ ((differences findLast: [ :diff | diff key ~= 'match' ]) - 3) max: 1
+	insert := differences count: [ :diff | diff key = 'insert' ].
+	remove := differences count: [ :diff | diff key = 'remove' ].
+	^ remove min: insert
 ]
 
 { #category : 'accessing' }

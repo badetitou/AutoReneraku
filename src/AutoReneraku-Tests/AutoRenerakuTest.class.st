@@ -62,6 +62,20 @@ AutoRenerakuTest >> testBuildBodyOfBasedOnForProtocol [
 ]
 
 { #category : 'tests' }
+AutoRenerakuTest >> testBuildBodyOfBasedOnForRemoval [
+
+	| method data |
+	method := ARSampleWithFlag >> #testOutside.
+	data := Dictionary new.
+	autoreneraku autoCorrectMethod: method.
+	(autoreneraku buildBodyOf: data basedOn: method).
+	"At least it should be removed (and replace with nothing, why not?)"
+	self assert: (data at: #body) equals: '```suggestion
+
+```'
+]
+
+{ #category : 'tests' }
 AutoRenerakuTest >> testComputeDiffStartOffsetFor [
 
 	| method |
@@ -80,12 +94,21 @@ AutoRenerakuTest >> testComputeDiffStartOffsetForProtocolUpdate [
 ]
 
 { #category : 'tests' }
+AutoRenerakuTest >> testComputeDiffStartOffsetForRemoval [
+
+	| method |
+	method := ARSampleWithFlag >> #testOutside.
+	autoreneraku autoCorrectMethod: method.
+	self assert:  (autoreneraku computeDiffStartOffsetFor: method) equals: 5.
+]
+
+{ #category : 'tests' }
 AutoRenerakuTest >> testComputeDiffStopOffsetFor [
 
 	| method |
 	method := ARSample >> #testOutside.
 	autoreneraku autoCorrectMethod: method.
-	self assert:  (autoreneraku computeDiffStopOffsetFor: method) equals: 7.
+	self assert:  (autoreneraku computeDiffStopOffsetFor: method) equals: 3.
 ]
 
 { #category : 'tests' }
@@ -95,4 +118,13 @@ AutoRenerakuTest >> testComputeDiffStopOffsetForProtocolUpdate [
 	method := ARSampleSubClass >> #testOutside.
 	autoreneraku autoCorrectMethod: method.
 	self assert:  (autoreneraku computeDiffStopOffsetFor: method) equals: 1.
+]
+
+{ #category : 'tests' }
+AutoRenerakuTest >> testComputeDiffStopOffsetForRemoval [
+
+	| method |
+	method := ARSampleWithFlag >> #testOutside.
+	autoreneraku autoCorrectMethod: method.
+	self assert:  (autoreneraku computeDiffStopOffsetFor: method) equals: 0.
 ]
