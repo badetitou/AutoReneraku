@@ -1,7 +1,4 @@
 SmalltalkCISpec {
-  #postLoading : [
-    'ci/autoReneraku.st'
-  ],
   #loading : [
     SCIMetacelloLoadSpec {
       #baseline : 'AutoReneraku',
@@ -12,7 +9,10 @@ SmalltalkCISpec {
       #onUpgrade : #useIncoming
     }
   ],
-  #testing : {
-    #failOnZeroTests : false
+   #testing : {
+    #coverage : {
+      #packages : [ 'AutoReneraku.*' ],
+      #format : #lcov
+    }
   }
 }
