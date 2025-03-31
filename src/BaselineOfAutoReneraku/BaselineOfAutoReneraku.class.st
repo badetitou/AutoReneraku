@@ -19,6 +19,16 @@ BaselineOfAutoReneraku >> baseline: spec [
 
 { #category : 'baselines' }
 BaselineOfAutoReneraku >> defineDependencies: spec [
+
+	spec
+		baseline: 'Mocketry'
+		with: [
+		spec repository: 'github://dionisiydk/Mocketry:versionTagOrBranch' ].
+
+	spec
+		baseline: 'AutoRenerakuSample'
+		with: [
+		spec repository: 'github://badetitou/AutoRenerakuSample:to-improve' ]
 ]
 
 { #category : 'baselines' }
@@ -28,5 +38,8 @@ BaselineOfAutoReneraku >> defineGroups: spec [
 { #category : 'baselines' }
 BaselineOfAutoReneraku >> definePackages: spec [
 
-	spec package: 'AutoReneraku'
+	spec package: 'AutoReneraku'.
+	spec
+		package: 'AutoReneraku-Tests'
+		with: [ spec requires: #( 'AutoReneraku' 'Mocketry' 'AutoRenerakuSample' ) ]
 ]
