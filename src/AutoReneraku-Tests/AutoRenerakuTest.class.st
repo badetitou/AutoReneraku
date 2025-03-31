@@ -41,3 +41,12 @@ AutoRenerakuTest >> testComputeDiffStartOffsetFor [
 	autoreneraku autoCorrectMethod: method.
 	self assert:  (autoreneraku computeDiffStartOffsetFor: method) equals: 5.
 ]
+
+{ #category : 'tests' }
+AutoRenerakuTest >> testComputeDiffStopOffsetFor [
+
+	| method |
+	method := ARSample >> #testOutside.
+	autoreneraku autoCorrectMethod: method.
+	self assert:  (autoreneraku computeDiffStopOffsetFor: method) equals: 7.
+]
