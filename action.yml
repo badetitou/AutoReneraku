@@ -13,6 +13,7 @@ runs:
   steps:
     - id: files
       uses: masesgroup/retrieve-changed-files@v3
+      continue-on-error: true
       with:
         format: "space-delimited"
     - run: echo "changed_files=${{ steps.files.outputs.added_modified }}" >> "$GITHUB_ENV"
