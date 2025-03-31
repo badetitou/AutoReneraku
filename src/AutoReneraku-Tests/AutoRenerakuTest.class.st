@@ -26,7 +26,10 @@ AutoRenerakuTest >> tearDown [
 	| registry |
 	registry := IceRepository registry detect: [ :r |
 		            r name = 'AutoReneraku-Sample' ].
-	registry loadedPackages do: #reload.
+	registry loadedPackages do: [ :package |
+		package
+			unload;
+			load ].
 	super tearDown
 ]
 
