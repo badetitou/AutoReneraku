@@ -150,3 +150,36 @@ AutoRenerakuTest >> testComputeDiffStopOffsetForRemoval [
 	autoreneraku autoCorrectMethod: method.
 	self assert:  (autoreneraku computeDiffStopOffsetFor: method) equals: 0.
 ]
+
+{ #category : 'tests' }
+AutoRenerakuTest >> testFillDataWithNewMethodData [
+
+	| method data |
+	method := ARSample >> #testOutside.
+	data := Dictionary new.
+	autoreneraku autoCorrectMethod: method.
+	autoreneraku fillData: data withNewMethodData: method.
+	self assert: data size equals: 4
+]
+
+{ #category : 'tests' }
+AutoRenerakuTest >> testFillDataWithNewMethodDataWhenOneLineUpdate [
+
+	| method data |
+	method := ARSampleSubClass >> #testOutside.
+	data := Dictionary new.
+	autoreneraku autoCorrectMethod: method.
+	autoreneraku fillData: data withNewMethodData: method.
+	self assert: data size equals: 3
+]
+
+{ #category : 'tests' }
+AutoRenerakuTest >> testFillDataWithNewMethodDataWhenRemove [
+
+	| method data |
+	method := ARSampleWithFlag >> #testOutside.
+	data := Dictionary new.
+	autoreneraku autoCorrectMethod: method.
+	autoreneraku fillData: data withNewMethodData: method.
+	self assert: data size equals: 3
+]

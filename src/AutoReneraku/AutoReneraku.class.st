@@ -182,6 +182,10 @@ AutoReneraku >> fillData: data withNewMethodData: aMethod [
 	self buildStartLineOf: data basedOn: aMethod.
 	self buildLineOf: data basedOn: aMethod.
 
+	(data at: #start_line) >= (data at: #line) ifTrue: [
+		data at: #line put: (data at: #start_line).
+		data removeKey: #start_line ].
+
 	^ data
 ]
 
