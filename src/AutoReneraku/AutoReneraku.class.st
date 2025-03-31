@@ -137,7 +137,8 @@ AutoReneraku >> computeDiffStopOffsetFor: method [
 		           sourceVersion: registry headCommit;
 		           targetVersion: registry workingCopy;
 		           buildForPackages:
-			           { (registry packageNamed: method methodClass package name) }.
+			           { (registry packageNamed:
+					            method methodClass package name) }.
 
 	diffChild := (iceDiff tree allChildren select: [ :child |
 		              child key = method selector ]) anyOne.
@@ -145,7 +146,7 @@ AutoReneraku >> computeDiffStopOffsetFor: method [
 	differences := (DiffMorph
 		                from: realModification leftContents
 		                to: realModification rightContents) difference.
-	^ (differences findLast: [ :diff | diff key ~= 'match' ]) - 3 "-3 to remove the [] and {} of tonel format"
+	^ ((differences findLast: [ :diff | diff key ~= 'match' ]) - 3) max: 1
 ]
 
 { #category : 'accessing' }
