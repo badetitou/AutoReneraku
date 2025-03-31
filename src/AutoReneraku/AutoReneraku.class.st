@@ -66,7 +66,8 @@ AutoReneraku >> buildLineOf: data basedOn: method [
 	startChar := self extractStartPosOf: method.
 
 	data at: #line put: ((sc arToLineCharacter: startChar) at: #line)
-		+ (self computeDiffStopOffsetFor: method) - 1 "-1 pharo"
+		+ (self computeDiffStartOffsetFor: method)
+		+ (self computeDiffStopOffsetFor: method) - 2 "-1 by pharo for each compute"
 ]
 
 { #category : 'private' }

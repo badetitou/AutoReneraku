@@ -76,6 +76,28 @@ AutoRenerakuTest >> testBuildBodyOfBasedOnForRemoval [
 ]
 
 { #category : 'tests' }
+AutoRenerakuTest >> testBuildLineOfBasedOn [
+
+		| method data |
+	method := ARSample >> #testOutside.
+	data := Dictionary new.
+	autoreneraku autoCorrectMethod: method.
+	(autoreneraku buildLineOf: data basedOn: method).
+	self assert: (data at: #line) equals: 14
+]
+
+{ #category : 'tests' }
+AutoRenerakuTest >> testBuildStartLineOfBasedOn [
+
+		| method data |
+	method := ARSample >> #testOutside.
+	data := Dictionary new.
+	autoreneraku autoCorrectMethod: method.
+	(autoreneraku buildStartLineOf: data basedOn: method).
+	self assert: (data at: #start_line) equals: 12
+]
+
+{ #category : 'tests' }
 AutoRenerakuTest >> testComputeDiffStartOffsetFor [
 
 	| method |
