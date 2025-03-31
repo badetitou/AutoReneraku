@@ -23,7 +23,7 @@ BaselineOfAutoReneraku >> defineDependencies: spec [
 	spec
 		baseline: 'Mocketry'
 		with: [
-		spec repository: 'github://dionisiydk/Mocketry:versionTagOrBranch' ].
+		spec repository: 'github://dionisiydk/Mocketry:master' ].
 
 	spec
 		baseline: 'AutoRenerakuSample'
