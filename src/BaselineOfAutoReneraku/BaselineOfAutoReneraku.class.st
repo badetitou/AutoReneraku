@@ -28,7 +28,7 @@ BaselineOfAutoReneraku >> defineDependencies: spec [
 	spec
 		baseline: 'AutoRenerakuSample'
 		with: [
-		spec repository: 'github://badetitou/AutoRenerakuSample:to-improve' ]
+		spec repository: 'github://badetitou/AutoReneraku-Sample:to-improve' ]
 ]
 
 { #category : 'baselines' }
