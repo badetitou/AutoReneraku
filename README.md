@@ -1,5 +1,7 @@
 # Autoreneraku
 
+[![Coverage Status](https://coveralls.io/repos/github/badetitou/AutoReneraku/badge.svg?branch=main)](https://coveralls.io/github/badetitou/AutoReneraku?branch=main)
+
 ## Setup
 
 This project uses variables from [Smalltalk-CI](https://github.com/hpi-swa/smalltalkCI) for now.
