@@ -29,8 +29,8 @@ AutoReneraku >> autoCorrectMethod: aMethod [
 AutoReneraku >> autoRenerakuMethod: aMethod [
 	"I return true if I applied some modification"
 
-	(self autoCorrectMethod: aMethod) ifTrue: [
-		self suggestNewMethod: aMethod ]
+	^ (self autoCorrectMethod: aMethod) ifTrue: [
+		  self suggestNewMethod: aMethod ]
 ]
 
 { #category : 'private' }
@@ -109,28 +109,25 @@ AutoReneraku >> commitSha: anObject [
 { #category : 'accessing' }
 AutoReneraku >> computeDiffStartOffsetFor: method [
 
-	| registry iceDiff diffChild realModification differences |
-	registry := IceRepository registry detect: [ :r |
-		            r name = self projectName ].
-	iceDiff := IceDiff new
-		           sourceVersion: registry headCommit;
-		           targetVersion: registry workingCopy;
-		           buildForPackages:
-			           { (registry packageNamed: method methodClass package name) }.
-
-	diffChild := (iceDiff tree allChildren select: [ :child |
-		              child key = method selector ]) anyOne.
-	realModification := diffChild value.
-	differences := (DiffMorph
-		                from: realModification leftContents
-		                to: realModification rightContents) difference.
+	| differences |
+	differences := self computeDifferencesFor: method.
 	^ differences findFirst: [ :diff | diff key ~= 'match' ]
 ]
 
 { #category : 'accessing' }
 AutoReneraku >> computeDiffStopOffsetFor: method [
 
-	| registry iceDiff diffChild realModification differences insert remove |
+	| differences insert remove |
+	differences := self computeDifferencesFor: method.
+	insert := differences count: [ :diff | diff key = 'insert' ].
+	remove := differences count: [ :diff | diff key = 'remove' ].
+	^ remove min: insert
+]
+
+{ #category : 'accessing' }
+AutoReneraku >> computeDifferencesFor: method [
+
+	| registry iceDiff diffChild realModification differences |
 	registry := IceRepository registry detect: [ :r |
 		            r name = self projectName ].
 	iceDiff := IceDiff new
@@ -141,14 +138,13 @@ AutoReneraku >> computeDiffStopOffsetFor: method [
 					            method methodClass package name) }.
 
 	diffChild := (iceDiff tree allChildren select: [ :child |
-		              child key = method selector ]) anyOne.
+		              child key = method selector and: [
+			              child parent key = method methodClass name ] ])
+		             anyOne.
 	realModification := diffChild value.
-	differences := (DiffMorph
-		                from: realModification leftContents
-		                to: realModification rightContents) difference.
-	insert := differences count: [ :diff | diff key = 'insert' ].
-	remove := differences count: [ :diff | diff key = 'remove' ].
-	^ remove min: insert
+	^ differences := (DiffMorph
+		                  from: realModification leftContents
+		                  to: realModification rightContents) difference
 ]
 
 { #category : 'accessing' }
@@ -272,7 +268,7 @@ AutoReneraku >> suggestNewMethod: aMethod [
 	data := Dictionary new.
 	data at: 'commit_id' put: commitSha.
 	self fillData: data withNewMethodData: aMethod.
-	self post: url contents: data
+	^ self post: url contents: data
 ]
 
 { #category : 'accessing' }
