@@ -30,8 +30,11 @@ AutoReneraku >> autoCorrectMethod: aMethod [
 AutoReneraku >> autoRenerakuMethod: aMethod [
 	"I return true if I applied some modification"
 
+	| savedDefinition |
+	savedDefinition := aMethod.
 	^ (self autoCorrectMethod: aMethod) ifTrue: [
-		  self suggestNewMethod: aMethod ]
+		  self suggestNewMethod: aMethod.
+		  savedDefinition methodClass compile: savedDefinition sourceCode ]
 ]
 
 { #category : 'private' }
@@ -62,13 +65,14 @@ AutoReneraku >> buildBodyOf: data basedOn: aMethod [
 { #category : 'private' }
 AutoReneraku >> buildLineOf: data basedOn: method [
 
-	| startChar sc |
+	| startChar sc diffStop line |
 	sc := TonelWriter sourceCodeOf: method methodClass.
 	startChar := self extractStartPosOf: method.
-
-	data at: #line put: ((sc arToLineCharacter: startChar) at: #line)
-		+ (self computeDiffStartOffsetFor: method)
-		+ (self computeDiffStopOffsetFor: method) - 2 "-1 by pharo for each compute"
+	diffStop := self computeDiffStopOffsetFor: method.
+	line := ((sc arToLineCharacter: startChar) at: #line)
+	        + (self computeDiffStartOffsetFor: method) - 1.
+	diffStop ~= 0 ifTrue: [ line := line + diffStop - 1 ].
+	data at: #line put: line
 ]
 
 { #category : 'private' }
