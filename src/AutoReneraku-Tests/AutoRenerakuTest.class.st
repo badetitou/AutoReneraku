@@ -152,6 +152,15 @@ AutoRenerakuTest >> testComputeDiffStopOffsetForRemoval [
 ]
 
 { #category : 'tests' }
+AutoRenerakuTest >> testDiffStartOutsideMultiStatementFlag [
+
+	| method |
+	method := ARSampleWithFlag >> #testOutsideMultiStatementFlag.
+	autoreneraku autoCorrectMethod: method.
+	self assert:  (autoreneraku computeDiffStartOffsetFor: method) equals: 9.
+]
+
+{ #category : 'tests' }
 AutoRenerakuTest >> testFillDataWithNewMethodData [
 
 	| method data |
