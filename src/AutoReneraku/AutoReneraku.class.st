@@ -18,6 +18,7 @@ AutoReneraku >> autoCorrectMethod: aMethod [
 	"I return true if I applied some modification"
 
 	| toApplyCritique |
+	(self isMethodFormatted: aMethod) ifFalse: [ ^ false ].
 	critiques := aMethod critiques.
 	toApplyCritique := critiques select: [ :critique |
 		                   critique providesChange ].
@@ -191,6 +192,13 @@ AutoReneraku >> initialize [
 	super initialize.
 	client := ZnClient new.
 	client forJsonREST
+]
+
+{ #category : 'accessing' }
+AutoReneraku >> isMethodFormatted: aMethod [
+	"Autoreneraku cannot apply on method not formatted. So we need to check this information first"
+
+	^ aMethod sourceCode = aMethod ast formattedCode
 ]
 
 { #category : 'private' }

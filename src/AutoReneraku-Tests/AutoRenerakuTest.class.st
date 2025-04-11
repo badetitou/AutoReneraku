@@ -215,3 +215,11 @@ AutoRenerakuTest >> testFillDataWithNewMethodDataWhenRemove [
 	autoreneraku fillData: data withNewMethodData: method.
 	self assert: data size equals: 3
 ]
+
+{ #category : 'tests' }
+AutoRenerakuTest >> testNotFormattedDoNothing [
+
+	| method |
+	method := ARSampleWithFlag >> #testOutsideMultiStatementFlagNotFormatted.
+	self deny: (autoreneraku isMethodFormatted: method)
+]
