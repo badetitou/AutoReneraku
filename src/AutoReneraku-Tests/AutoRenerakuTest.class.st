@@ -76,6 +76,20 @@ AutoRenerakuTest >> testBuildBodyOfBasedOnForRemoval [
 ]
 
 { #category : 'tests' }
+AutoRenerakuTest >> testBuildBodyOfBasedOnForRemovalMultiStatement [
+
+	| method data |
+	method := ARSampleWithFlag >> #testOutsideMultiStatementFlag.
+	data := Dictionary new.
+	autoreneraku autoCorrectMethod: method.
+	(autoreneraku buildBodyOf: data basedOn: method).
+	"At least it should be removed (and replace with nothing, why not?)"
+	self assert: (data at: #body) equals: '```suggestion
+
+```'
+]
+
+{ #category : 'tests' }
 AutoRenerakuTest >> testBuildLineOfBasedOn [
 
 		| method data |
@@ -158,6 +172,15 @@ AutoRenerakuTest >> testDiffStartOutsideMultiStatementFlag [
 	method := ARSampleWithFlag >> #testOutsideMultiStatementFlag.
 	autoreneraku autoCorrectMethod: method.
 	self assert:  (autoreneraku computeDiffStartOffsetFor: method) equals: 9.
+]
+
+{ #category : 'tests' }
+AutoRenerakuTest >> testDiffStopOutsideMultiStatementFlag [
+
+	| method |
+	method := ARSampleWithFlag >> #testOutsideMultiStatementFlag.
+	autoreneraku autoCorrectMethod: method.
+	self assert:  (autoreneraku computeDiffStopOffsetFor: method) equals: 0
 ]
 
 { #category : 'tests' }
