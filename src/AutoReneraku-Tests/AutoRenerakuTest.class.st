@@ -219,13 +219,12 @@ AutoRenerakuTest >> testFillDataWithNewMethodDataWhenRemove [
 { #category : 'tests' }
 AutoRenerakuTest >> testNotFirstMethodInTonel [
 
-	| method1 method2 data |
+	| method2 data |
 
 	(autoreneraku stub suggestNewMethod: Any) willReturn: true.
 
-	method1 := ARSampleWithFlag >> #testOutside .
-	data := Dictionary new.
-	autoreneraku autoRenerakuMethod: method1.
+	autoreneraku autoRenerakuMethod: ARSampleWithFlag >> #testOutside.
+	autoreneraku autoRenerakuMethod: ARSampleWithFlag >> #testOutsideMultiStatementFlagNotFormatted.
 
 	method2 := ARSampleWithFlag >> #testOutsideMultiStatementFlag.
 	data := Dictionary new.
