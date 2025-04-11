@@ -220,6 +220,8 @@ AutoRenerakuTest >> testFillDataWithNewMethodDataWhenRemove [
 AutoRenerakuTest >> testNotFormattedDoNothing [
 
 	| method |
-	method := ARSampleWithFlag >> #testOutsideMultiStatementFlagNotFormatted.
-	self deny: (autoreneraku isMethodFormatted: method)
+	method := ARSampleWithFlag
+	          >> #testOutsideMultiStatementFlagNotFormatted.
+	self deny: (autoreneraku isMethodFormatted: method).
+	self deny: (autoreneraku autoCorrectMethod: method)
 ]
